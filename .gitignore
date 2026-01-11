@@ -15,3 +15,9 @@ id_ansible.pub
 # OS / Editor
 .DS_Store
 .vscode/
+*.pem
+*.key
+*.env
+*.vault
+*.retry
+
