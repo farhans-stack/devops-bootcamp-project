@@ -1,13 +1,13 @@
-- name: Install Docker
+- name: Install Docker and Deploy Web Application
   hosts: web
   become: yes
 
   tasks:
-    - name: Update apt
+    - name: Update apt cache
       apt:
         update_cache: yes
 
-    - name: Install packages
+    - name: Install required packages
       apt:
         name:
           - ca-certificates
@@ -23,7 +23,7 @@
       args:
         creates: /etc/apt/keyrings/docker.gpg
 
-    - name: Add Docker repo
+    - name: Add Docker repository
       shell: |
         echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
         https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
@@ -38,14 +38,47 @@
         state: present
         update_cache: yes
 
-    - name: Enable Docker
+    - name: Enable and start Docker
       service:
         name: docker
         state: started
         enabled: yes
 
-    - name: Add ubuntu to docker group
+    - name: Add ubuntu user to docker group
       user:
         name: ubuntu
         groups: docker
         append: yes
+
+    - name: Install Docker Python SDK
+      apt:
+        name: python3-docker
+        state: present
+        update_cache: yes
+
+    - name: Copy app source to web server
+      copy:
+        src: "{{ playbook_dir }}/../app"
+        dest: /home/ubuntu/app
+        owner: ubuntu
+        group: ubuntu
+        mode: "0755"
+
+    - name: Build Docker image for web app (v3)
+      docker_image:
+        name: my-devops-project
+        tag: v3
+        build:
+          path: /home/ubuntu/app
+        source: build
+        force_source: true
+
+    - name: Run web application container (v3)
+      docker_container:
+        name: my-devops-project-v3
+        image: my-devops-project:v3
+        state: started
+        restart_policy: always
+        ports:
+          - "80:80"
+
