@@ -31,6 +31,7 @@ while following DevOps best practices.
 ---
 
 ## Technology Stack
+- Terraform (Infrastructure as Code)
 - Docker
 - Docker Compose
 - Nginx
@@ -39,6 +40,13 @@ while following DevOps best practices.
 - Node Exporter
 - Cloudflare Tunnel
 - AWS EC2
+
+---
+
+## Infrastructure Provisioning (Terraform)
+Infrastructure for this project was provisioned using Terraform.
+Terraform was used to create and manage AWS EC2 instances for the Ansible Controller,
+Web Server, and Monitoring Server, ensuring consistent and repeatable infrastructure deployment.
 
 ---
 
@@ -84,6 +92,8 @@ Prometheus is used as Grafana’s data source and is not exposed publicly.
 ## Conclusion
 This project reflects practical DevOps implementation using real infrastructure,
 focusing on security, automation, and observability.
+This project combines Infrastructure as Code (Terraform), configuration management (Ansible),
+containerization (Docker), and monitoring to demonstrate a complete DevOps workflow.
 
 ## System Architecture
 The project is deployed across three EC2 servers with clearly defined roles:
