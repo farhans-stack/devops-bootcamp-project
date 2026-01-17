@@ -5,16 +5,28 @@ secure application deployment, monitoring, and visualization using modern DevOps
 ---
 
 ## Architecture Overview
-The system is deployed using two EC2 servers:
+This project demonstrates a complete DevOps workflow using automation, 
+containerization, secure deployment, and monitoring.
 
-1. **Web Server**
-   - Hosts the containerized web application
-   - Runs using Docker
-   - Exposed securely via Cloudflare Tunnel
+The system is designed with a clear separation of responsibilities and consists 
+of three main servers:
 
-2. **Monitoring Server**
-   - Hosts Prometheus, Grafana, and Node Exporter
-   - Used for system monitoring and observability
+1. Ansible Controller  
+   - Acts as the central automation server  
+   - Uses Ansible playbooks to provision infrastructure and deploy services  
+   - Manages both the web server and monitoring server  
+
+2. Web Server  
+   - Hosts the containerized web application  
+   - Runs the application using Docker  
+   - Exposes the application internally on port 8080  
+
+3. Monitoring Server  
+   - Hosts Prometheus, Grafana, and Node Exporter  
+   - Collects and visualizes system metrics from the servers  
+
+This architecture ensures automation, scalability, security, and observability 
+while following DevOps best practices.
 
 ---
 
@@ -74,23 +86,33 @@ This project reflects practical DevOps implementation using real infrastructure,
 focusing on security, automation, and observability.
 
 ## System Architecture
-This project is deployed using three EC2 servers with clear separation of roles:
+The project is deployed across three EC2 servers with clearly defined roles:
 
-1. Ansible Controller  
-   - Used to automate server configuration and application deployment  
-   - Manages the web and monitoring servers using Ansible playbooks  
+1. **Ansible Controller**  
+   - Centralized automation and configuration management server  
+   - Executes Ansible playbooks for application deployment and service setup  
+   - Ensures consistent configuration across all servers  
 
-2. Web Server  
-   - Hosts the containerized web application  
-   - Runs on Docker and serves the application internally on port 8080  
-   - Public access is provided securely via Cloudflare Tunnel  
+2. **Web Server**  
+   - Runs the containerized web application using Docker  
+   - Application listens internally on port 8080  
+   - Public access is securely exposed via Cloudflare Tunnel  
+   - No inbound ports are opened on the server  
 
-3. Monitoring Server  
-   - Hosts Prometheus, Grafana, and Node Exporter  
-   - Prometheus collects system metrics internally  
-   - Grafana visualizes metrics and is exposed publicly via Cloudflare Tunnel  
+3. **Monitoring Server**  
+   - Runs Prometheus, Grafana, and Node Exporter in Docker containers  
+   - Prometheus collects metrics from Node Exporter  
+   - Grafana visualizes system performance metrics  
+   - Grafana is exposed publicly via Cloudflare Tunnel  
+   - Prometheus remains internal and is not publicly accessible  
 
-Cloudflare Tunnel is used to securely expose the web application and monitoring
-dashboard without opening any inbound ports on the servers.
+### Secure Access via Cloudflare Tunnel
+
+Cloudflare Tunnel is used to securely route external traffic to internal services:
+- `web.farhansss.com` → Web Server (port 8080)
+- `monitoring.farhansss.com` → Grafana (port 3000)
+
+This approach allows secure public access without exposing any inbound ports, 
+significantly reducing the attack surface of the infrastructure.
 
 
