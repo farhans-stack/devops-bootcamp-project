@@ -31,7 +31,7 @@ while following DevOps best practices.
 ---
 
 ## Technology Stack
-- Terraform (Infrastructure as Code)
+- Terraform(AWS Provisioning)
 - Docker
 - Docker Compose
 - Nginx
