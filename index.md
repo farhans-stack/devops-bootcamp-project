@@ -31,6 +31,7 @@ while following DevOps best practices.
 ---
 
 ## Technology Stack
+-Terraform(AWS Provisioning)
 - Docker
 - Docker Compose
 - Nginx
@@ -41,6 +42,15 @@ while following DevOps best practices.
 - AWS EC2
 
 ---
+
+## Infrastructure Provisioning (Terraform)
+Terraform is used to provision and manage AWS infrastructure for this project.
+It is responsible for creating EC2 instances for the Ansible Controller,
+Web Server, and Monitoring Server.
+
+Infrastructure is managed as code to ensure consistency, repeatability,
+and easier maintenance across environments.
+
 
 ## Application Deployment
 The web application is containerized using Docker and deployed on the web server.
