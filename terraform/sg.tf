@@ -1,10 +1,18 @@
 resource "aws_security_group" "public" {
   name        = "devops-public-sg"
-  description = "Security group for public web server"
+  description = "Security group for public web/bastion server"
   vpc_id      = aws_vpc.devops.id
 
   ingress {
-    description = "HTTP from internet"
+    description = "SSH from my IP"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["161.142.154.210/32"]
+  }
+
+  ingress {
+    description = "HTTP"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
@@ -12,14 +20,15 @@ resource "aws_security_group" "public" {
   }
 
   ingress {
-    description = "SSH from VPC only"
-    from_port   = 22
-    to_port     = 22
+    description = "HTTPS"
+    from_port   = 443
+    to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = ["10.0.0.0/24"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
+    description = "Allow all outbound"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
@@ -37,14 +46,15 @@ resource "aws_security_group" "private" {
   vpc_id      = aws_vpc.devops.id
 
   ingress {
-    description = "SSH from VPC only"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["10.0.0.0/24"]
+    description     = "SSH from public bastion SG only"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    security_groups = [aws_security_group.public.id]
   }
 
   egress {
+    description = "Allow all outbound"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
