@@ -127,6 +127,17 @@ significantly reducing the attack surface of the infrastructure.
 
 ---- 
 
+## ⚠️ DevOps v2 Refactor (Active Development)
+
+This branch (`devops-v2`) contains a refactored version of the project with an updated architecture.
+
+Key changes:
+- NAT Gateway removed (cost optimisation)
+- Bastion-based access using the web server
+- Private instances are no longer directly accessible from the internet
+- Ansible is now executed from the local machine
+
+👉 To view the original version, switch to the `main` branch.
 
 # DevOps Bootcamp Project
 
