@@ -128,3 +128,72 @@ significantly reducing the attack surface of the infrastructure.
 ---- 
 
 
+# DevOps Bootcamp Project
+
+This project provisions and manages a small AWS-based infrastructure using Terraform and Ansible.
+
+## Current Architecture
+
+The infrastructure consists of 3 EC2 instances inside a custom VPC:
+
+- **Web Server**  
+  - Runs in the **public subnet**
+  - Has a **public IP**
+  - Hosts the web application
+  - Also acts as the **bastion/jump host**
+
+- **Ansible Server**  
+  - Runs in the **private subnet**
+  - No public IP
+  - Managed through the bastion host
+
+- **Monitoring Server**  
+  - Runs in the **private subnet**
+  - No public IP
+  - Managed through the bastion host
+
+## Networking Design
+
+- The **public subnet** is associated with a route table that routes internet traffic through an Internet Gateway.
+- The **private subnet** has no NAT Gateway.
+- This means private instances are **not directly reachable from the internet** and do not have general outbound internet access.
+
+## Access Model
+
+This project now uses the following access pattern:
+
+- **Laptop** runs Ansible
+- **Web Server** acts as the bastion host
+- **Private servers** are accessed through the bastion using SSH ProxyCommand
+
+Flow:
+
+`Laptop -> Web/Bastion -> Private Instances`
+
+## Why No NAT Gateway?
+
+The project was refactored to remove the NAT Gateway in order to:
+
+- reduce cost
+- simulate a more security-conscious production-like setup
+- keep private instances non-public
+
+## Provisioning Tools
+
+- **Terraform**: provisions AWS infrastructure
+- **Ansible**: configures and manages servers from the local machine
+
+## Ansible Inventory Design
+
+- `webservers` group contains the public web server
+- `private` group contains:
+  - ansible
+  - monitoring
+
+Private hosts are accessed through the web server using SSH ProxyCommand.
+
+## Notes
+
+- The local machine is the Ansible control node.
+- The web server doubles as the bastion host.
+- Private instances do not have public internet access unless additional endpoints are configured.
